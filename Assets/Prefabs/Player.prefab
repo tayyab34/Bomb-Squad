@@ -784,16 +784,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba81d9b737823db4fb00585614bcdbe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ismine: 0
-  bombspawn: 1
   normalbomb: 1
-  isstickybomb: 0
-  ismultibomb: 0
   Bomb:
   - {fileID: 3038202043809837251, guid: e1453be1e89fbb14da24b1a6096a456b, type: 3}
-  - {fileID: 3038202043809837251, guid: 44906a21707c9dc408927bc52249f807, type: 3}
-  - {fileID: 3038202043809837251, guid: 9fe04afb4cfc1d741bff97f820468982, type: 3}
   - {fileID: 3038202043809837251, guid: 7cf42e629849140419e84a379d90d33b, type: 3}
+  - {fileID: 3038202043809837251, guid: 9fe04afb4cfc1d741bff97f820468982, type: 3}
+  - {fileID: 3038202043809837251, guid: 44906a21707c9dc408927bc52249f807, type: 3}
+  explosionparticle: {fileID: 198194127032045410, guid: 46876a2780737ec45a19d62f88e5ce56, type: 3}
 --- !u!65 &6228737886934255337
 BoxCollider:
   m_ObjectHideFlags: 0

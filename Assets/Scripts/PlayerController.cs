@@ -7,27 +7,24 @@ public class PlayerController : MonoBehaviour
     private float speed = 10f;
     int lives = 0;
     private Animator animator;
-    public bool ismine = false;
-    public bool bombspawn = true;
-    public bool normalbomb=true;
-    public bool isstickybomb = false;
-    public bool ismultibomb = false;
+    public bool normalbomb = true;
+    private int bombtype = 0;
     public GameObject[] Bomb;
-    //public Powe currentpowerup;
     private GameObject bomb;
-    // Start is called before the first frame update
+    public ParticleSystem explosionparticle;
+
     void Start()
     {
         animator = GetComponent<Animator>();
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
         SpawnBomb();
     }
+    //player Movement
     private void Movement()
     {
         float horizontaInput = Input.GetAxis("Horizontal");
@@ -44,85 +41,113 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isrun", false);
         }
     }
+    //Bombs Spawning
     private void SpawnBomb()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && bombspawn && normalbomb)
+        if (Input.GetKeyDown(KeyCode.Space) && bombtype==0 && normalbomb)
         {
             bomb = Instantiate(Bomb[0], transform.position, Bomb[0].transform.rotation);
             bomb.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(-400f, 400f, 0));
-            bombspawn = false;
-            StartCoroutine(BombSpawnerDelay());
+            normalbomb = false;
+            StartCoroutine(BombDelay());
         }
-        if (Input.GetKeyDown(KeyCode.Space) && isstickybomb)
+
+        else if (Input.GetKeyDown(KeyCode.Space) && bombtype==1)
         {
-            for (int i= 0; i < 3;i++)
+            for (int i = 0; i < 3; i++)
             {
-                    bomb = Instantiate(Bomb[1], transform.position, Bomb[1].transform.rotation);
-                    bomb.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(-400f, 400f, 0));
-                    i++;     
+                bomb = Instantiate(Bomb[1], transform.position, Bomb[1].transform.rotation);
+                bomb.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(-400f, 400f, 0));
+                StartCoroutine(BombDelay());
             }
-            isstickybomb = false;
+            StartCoroutine(PowerUpActive());
         }
-        if(Input.GetKeyDown(KeyCode.Space) && ismultibomb)
-        {
-            bomb = Instantiate(Bomb[3], transform.position, Bomb[3].transform.rotation);
-            bomb.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(-400f, 400f, 0));
-            Destroy(bomb, 5.0f);
-            StartCoroutine(BombSpawnerDelay());
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && ismine)
+        else if (Input.GetKeyDown(KeyCode.Space) && bombtype == 2)
         {
             bomb = Instantiate(Bomb[2], transform.position, Bomb[2].transform.rotation);
             bomb.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(-400f, 400f, 0));
+            StartCoroutine(PowerUpActive());         
         }
 
+        else if (Input.GetKeyDown(KeyCode.Space) && bombtype == 3)
+        {
+            bomb = Instantiate(Bomb[3], transform.position, Bomb[3].transform.rotation);
+            bomb.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(-400f, 400f, 0));
+            StartCoroutine(BombDelay());
+            StartCoroutine(PowerUpActive());
+        }
 
     }
-
-    IEnumerator BombSpawnerDelay()
+    IEnumerator BombDelay()
     {
         yield return new WaitForSeconds(5);
-        bombspawn = true;
+        if (bombtype == 0)
+        {
+            normalbomb = true;
+        }  
+        Instantiate(explosionparticle, bomb.transform.position, explosionparticle.transform.rotation);
         Destroy(bomb);
     }
-    public void AddLives(int value)
+    //power up active for 10s
+    IEnumerator PowerUpActive()
+    {
+        if (bombtype==1)
+        {
+            yield return new WaitForSeconds(10);
+            Bomb[1].SetActive(false);
+        }
+        if (bombtype == 2)
+        {
+            yield return new WaitForSeconds(10);
+            Bomb[2].SetActive(false);
+        }
+        if (bombtype == 3)
+        {
+            yield return new WaitForSeconds(10);
+            Bomb[3].SetActive(false);
+        }
+        bombtype = 0;
+    }
+    //Adding lives
+    private void  AddLives(int value)
     {
         lives += value;
         Debug.Log("Lives:" + lives);
     }
+    //Managing Triggering Operation
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Mines"))
+        if (other.CompareTag("MultiBombPowerUp"))
         {
             Destroy(other.gameObject);
-            ismine = true;
-            normalbomb = false;
+            bombtype = 1;
+            Bomb[1].SetActive(true);
         }
-        if (other.CompareTag("StickyBomb"))
+        if (other.CompareTag("MinesPowerUp"))
         {
             Destroy(other.gameObject);
-            isstickybomb = true;
-            normalbomb = false;
+            bombtype = 2;
+            Bomb[2].SetActive(true);
         }
-        if (other.CompareTag("MultiBomb"))
+        if (other.CompareTag("StickyBombPowerUp"))
         {
             Destroy(other.gameObject);
-            ismultibomb = true;
-            normalbomb = false;
+            bombtype = 3;
+            Bomb[3].SetActive(true);
+        }
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(other.gameObject);
+        }
+        if (other.CompareTag("LifePowerUp"))
+        {
+            AddLives(1);
+            Destroy(other.gameObject);
         }
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (isstickybomb == true)
-        {
-            bomb.GetComponent<Rigidbody>().isKinematic = true;
-            transform.parent = collision.gameObject.transform;
-            isstickybomb = false;
-        }
-        
-    }
+}
 
-}   
+
 
 
 

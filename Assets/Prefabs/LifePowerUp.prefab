@@ -12,11 +12,10 @@ GameObject:
   - component: {fileID: 2941680408196100106}
   - component: {fileID: 5619832924299720346}
   - component: {fileID: 4761901965250659763}
-  - component: {fileID: -5149348396042165782}
   - component: {fileID: -3908995452543171025}
   m_Layer: 0
   m_Name: LifePowerUp
-  m_TagString: PowerUp
+  m_TagString: LifePowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,19 +96,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-5149348396042165782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2480089147426920719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60fd0347dcf2c85459a0ab0965558b4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Power: 4
 --- !u!114 &-3908995452543171025
 MonoBehaviour:
   m_ObjectHideFlags: 0
