@@ -12,6 +12,13 @@ TagManager:
   - MultiBomb
   - StickyBomb
   - Enemy
+  - MinesPowerUp
+  - MultiBombPowerUp
+  - StickyBombPowerUp
+  - LifePowerUp
+  - FxTemporaire
+  - Sensor
+  - Wall
   layers:
   - Default
   - TransparentFX
